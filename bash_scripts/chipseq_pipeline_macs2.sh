@@ -66,6 +66,11 @@ SETTINGS=
 [ ${opts[a]} == "n" ] || SETTINGS="${SETTINGS} --cutoff-analysis"
 [ ${opts[o]} == "n" ] || SETTINGS="${SETTINGS} --nomodel"
 
+# make output directory
+CMD0="mkdir ${opts[e]}"
+echo "CMD0 : $CMD0"
+eval $CMD0
+
 # Call Peaks using MACS2 on individual replicates (using relaxed thresholds)
 CMD1="macs2 callpeak --treatment ${opts[r]} --control ${opts[c]} -f BAM -g ${opts[n]} -n ${opts[e]} --outdir MACS_${opts[e]} -q ${opts[q]} -m ${opts[m]} ${opts[x]} --extsize ${opts[t]} ${SETTINGS}"
 echo "CMD1 : $CMD1";
