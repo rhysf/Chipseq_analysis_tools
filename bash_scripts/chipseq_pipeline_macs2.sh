@@ -69,5 +69,6 @@ SETTINGS=
 # Call Peaks using MACS2 on individual replicates (using relaxed thresholds)
 CMD1="macs2 callpeak --treatment ${opts[r]} --control ${opts[c]} -f BAM -g ${opts[n]} -n ${opts[e]} --outdir MACS_${opts[e]} -q ${opts[q]} -m ${opts[m]} ${opts[x]} --extsize ${opts[t]} ${SETTINGS}"
 echo "CMD1 : $CMD1";
-eval ${CMD1}
+echo "CMD1 : $CMD1" > MACS_${opts[e]}/commands.txt 2>&1 
+eval ${CMD1} >> MACS_${opts[e]}/commands.txt 2>&1 
 
