@@ -15,8 +15,8 @@ die $usage unless ($opt_a && $opt_b);
 foreach my $file($opt_a, $opt_b) { die "Cannot open $file : $!" unless (-e $file); }
 
 # save peak calls (different peaks can be given the same name across multiple file e.g. 7000000096786010-222 in file 1 and file2 - so give a unique tag)
-my $peak_calls1 = &peaks_file_to_struct($opt_a);
-my $peak_calls2 = &peaks_file_to_struct($opt_b);
+my $peak_calls1 = &peaks_file_to_struct($opt_a, 'file1');
+my $peak_calls2 = &peaks_file_to_struct($opt_b, 'file2');
 
 # compare bidirectional
 my $overlap1_and_2 = &compare($peak_calls1, $peak_calls2);
@@ -118,7 +118,7 @@ sub compare {
 }
 
 sub peaks_file_to_struct {
-	my ($file) = @_;
+	my ($file, $tag) = @_;
 	warn "peaks_file_to_struct: $file\n";
 
 	my $peak_caller = "macs2";
@@ -156,10 +156,10 @@ sub peaks_file_to_struct {
 
 		# save (peak name -> chr, start, end, fold_change and pvalue)
 		my $PeakID = ($chr . '-' . $start . '-' . $tag);
-		$info{$PeakID}{'chr'} = $chr;
-		$info{$PeakID}{'start'} = $start;
-		$info{$PeakID}{'end'} = $end;
-		$info{$PeakID}{'line'} = $line;
+		$peaks{$PeakID}{'chr'} = $chr;
+		$peaks{$PeakID}{'start'} = $start;
+		$peaks{$PeakID}{'end'} = $end;
+		$peaks{$PeakID}{'line'} = $line;
 	}
 
 	return \%peaks;
