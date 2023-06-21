@@ -3,8 +3,7 @@ use strict;
 use Getopt::Std;
 use FindBin qw($Bin);
 use lib "$Bin/perl_modules";
-#use MutationTools::read_BAM;
-use MutationTools::read_Chipseq_peaks;
+use read_Chipseq_peaks;
 use Data::Dumper;
 
 ### rfarrer@broadinstitute.org

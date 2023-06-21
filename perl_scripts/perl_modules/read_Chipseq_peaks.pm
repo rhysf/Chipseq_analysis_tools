@@ -12,9 +12,9 @@ $VERSION = 0.1;
 use FindBin qw($Bin);
 use lib "$Bin";
 #use MutationTools::color_space;
-use MutationTools::read_Tab;
-use MutationTools::read_FASTA;
-use MutationTools::read_SAM;
+use read_Tab;
+use read_FASTA;
+use read_SAM;
 use Data::Dumper;
 use lib "/home/unix/rfarrer/perl5/lib/perl5/x86_64-linux-thread-multi/";
 use Bio::DB::HTS;
@@ -167,32 +167,37 @@ sub count_reads_in_region {
 			my $found = 0;
 
 			# Go through each peak
-			PEAK_START: foreach my $peak_start(keys %{$peaks}) {
-				PEAK_END: foreach my $peak_end(keys %{$$peaks{$peak_start}}) {
+			PEAK_START: foreach my $peak_start(sort keys %{$peaks}) {
+				PEAK_END: foreach my $peak_end(sort keys %{$$peaks{$peak_start}}) {
 
 					#warn "checking peak start $peak_start and peak end $peak_end\n";
 					
 					LOOP: for(my $i=$start; $i<$end; $i++) {
 						if(($i >= $peak_start) && ($i <= $peak_end)) {
-							#warn "\treads in peaks += $number_reads\n";
+							#warn "Read $start - $end ($number_reads) in peak $peak_start - $peak_end\n";
+
 							$reads_in_peaks += $number_reads;
 							$found = 1;
 							last PEAK_START;
 						}
 					}
 
-					#warn "does read at $start - $end ($number_reads) fall within peak $peak_start - $peak_end\n";
+					#warn "does read at $start - $end ($number_reads) fall within peak $peak_start - $peak_end : $found\n";
 					#die;
 				}
 			}
 
 			# Not found in a peak
 			if($found eq 0) { 
-				#warn "\treads not in peaks += $number_reads\n";
+				#warn "Read $start - $end ($number_reads) not in a peak\n"; 
+
 				$reads_not_in_peaks += $number_reads; 
 			}
 		}
 	}
+
+	
+
 	#warn "count_reads_in_region: processed $reads_ive_processed reads = $reads_in_peaks reads in peaks + $reads_not_in_peaks reads not in peaks\n";
 	return ($reads_in_peaks, $reads_not_in_peaks);
 }
